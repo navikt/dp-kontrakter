@@ -1,52 +1,53 @@
 package no.nav.dagpenger.kontrakter.iverksett
 
-import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto
+import no.nav.dagpenger.kontrakter.felles.Brevmottakere
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
 import java.math.BigDecimal
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 
 data class IverksettDto(
     val sakId: UUID,
     val behandlingId: UUID,
     val personIdent: String,
-    val vedtak: VedtaksdetaljerDto,
+    val vedtak: VedtaksdetaljerDagpenger,
     @Deprecated("Bruk forrigeIverksetting") val utbetalingerPaaForrigeVedtak: List<UtbetalingDto> = emptyList(),
     val forrigeIverksetting: ForrigeIverksettingDto? = null
 )
 
-data class VedtaksdetaljerDto(
+data class VedtaksdetaljerDagpenger(
     val vedtakstype: VedtakType = VedtakType.RAMMEVEDTAK,
+    val vedtaksresultat: Vedtaksresultat,
     val vedtakstidspunkt: LocalDateTime,
-    val resultat: Vedtaksresultat,
+    val opphørÅrsak: OpphørÅrsak?,
     val saksbehandlerId: String,
     val beslutterId: String,
-    val opphorAarsak: OpphørÅrsak? = null,
-    val avslagAarsak: AvslagÅrsak? = null,
-    val utbetalinger: List<UtbetalingDto> = emptyList(),
-    val vedtaksperioder: List<VedtaksperiodeDto> = emptyList(),
-    val tilbakekreving: TilbakekrevingDto? = null,
-    val brevmottakere: List<BrevmottakerDto> = emptyList(),
-)
-data class VedtaksperiodeDto(
-    val fraOgMedDato: LocalDate,
-    val tilOgMedDato: LocalDate? = null,
-    val periodeType: VedtaksperiodeType = VedtaksperiodeType.HOVEDPERIODE,
+    val tilkjentYtelse: TilkjentYtelse?,
+    val tilbakekreving: Tilbakekrevingsdetaljer? = null,
+    val brevmottakere: Brevmottakere? = null,
+    val vedtaksperioder: List<VedtaksperiodeDagpenger> = listOf(),
+    val avslagÅrsak: AvslagÅrsak? = null,
 )
 
-data class TilbakekrevingDto(
+sealed class Vedtaksperiode
+
+data class VedtaksperiodeDagpenger(
+    val periode: Datoperiode,
+    val periodeType: VedtaksperiodeType,
+) : Vedtaksperiode()
+
+data class Tilbakekrevingsdetaljer(
     val tilbakekrevingsvalg: Tilbakekrevingsvalg,
-    val tilbakekrevingMedVarsel: TilbakekrevingMedVarselDto?,
+    val tilbakekrevingMedVarsel: TilbakekrevingMedVarsel?,
 )
 
-data class TilbakekrevingMedVarselDto(
+data class TilbakekrevingMedVarsel(
     val varseltekst: String,
-    val sumFeilutbetaling: BigDecimal? = null, // Hentes fra simulering hvis det mangler
-    val fellesperioder: List<Datoperiode> = emptyList()
-) // Hentes fra simulering hvis det mangler
+    val sumFeilutbetaling: BigDecimal?,
+    val perioder: List<Datoperiode>?,
+)
 
 enum class IverksettStatus {
     SENDT_TIL_OPPDRAG,
@@ -65,10 +66,7 @@ enum class VedtaksperiodeType {
     SANKSJON
 }
 
-data class ForrigeIverksettingDto (
+data class ForrigeIverksettingDto(
     val behandlingId: UUID,
     val utbetalinger: List<UtbetalingDto> = emptyList()
 )
-
-
-

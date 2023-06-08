@@ -27,6 +27,11 @@
             <artifactId>felles</artifactId>
             <version>${revision}${sha1}${changelist}</version>
         </dependency>
+        <dependency>
+            <groupId>no.nav.dagpenger.kontrakter</groupId>
+            <artifactId>oppdrag</artifactId>
+            <version>${revision}${sha1}${changelist}</version>
+        </dependency>
 
         <!-- Kotlin -->
         <dependency>

@@ -8,7 +8,7 @@ data class FrittståendeBrevDto(
     val fil: ByteArray,
     val journalførendeEnhet: String,
     val saksbehandlerIdent: String,
-    val mottakere: List<BrevmottakerDto>? = null,
+    val mottakere: Brevmottakere? = null,
 )
 
 enum class FrittståendeBrevType(val tittel: String) {

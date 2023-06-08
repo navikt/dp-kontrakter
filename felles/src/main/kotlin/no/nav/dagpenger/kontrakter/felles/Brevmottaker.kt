@@ -1,7 +1,9 @@
 package no.nav.dagpenger.kontrakter.felles
 
+data class Brevmottakere(val mottakere: List<Brevmottaker>)
+
 // Brukes også fra [FrittståendeBrevDto]
-data class BrevmottakerDto(
+data class Brevmottaker(
     val ident: String,
     val navn: String,
     val mottakerRolle: MottakerRolle,
