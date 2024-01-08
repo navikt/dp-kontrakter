@@ -20,7 +20,7 @@ sealed class Stønadsdata(open val stønadstype: StønadType) {
             return Result.runCatching { StønadTypeDagpenger.valueOf(stønadstype) }.fold(
                     onSuccess = {
                         val ferietillegg = json.findValue("ferietillegg")?.asText()
-                        if (ferietillegg != null) {
+                        if (ferietillegg != null && ferietillegg != "null") {
                             StønadsdataDagpenger(it, Ferietillegg.valueOf(ferietillegg))
                         } else {
                             StønadsdataDagpenger(it)
