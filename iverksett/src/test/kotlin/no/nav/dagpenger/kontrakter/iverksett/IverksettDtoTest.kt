@@ -68,8 +68,9 @@ class IverksettDtoTest {
                 "belopPerDag": 10,
                 "fraOgMedDato": "2021-05-01",
                 "tilOgMedDato": "2021-05-31",
-                "stonadstype": "$stønadType",
-                "ferietillegg": "ORDINAER"
+                "stønadsdata": {
+                  "stønadstype": "$stønadType"
+                }
               }
             ],
             "vedtaksperioder": [
