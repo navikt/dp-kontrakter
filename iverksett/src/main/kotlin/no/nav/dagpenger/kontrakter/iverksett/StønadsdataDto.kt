@@ -7,8 +7,8 @@ import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 
 enum class Ferietillegg {
-    ORDINAER,
-    AVDOD
+    ORDINÆR,
+    AVDØD,
 }
 
 sealed class StønadsdataDto(open val stønadstype: StønadType) {
@@ -18,19 +18,19 @@ sealed class StønadsdataDto(open val stønadstype: StønadType) {
         fun deserialize(json: JsonNode): StønadsdataDto {
             val stønadstype = json.findValue("stønadstype").asText()
             return Result.runCatching { StønadTypeDagpenger.valueOf(stønadstype) }.fold(
-                    onSuccess = {
-                        val ferietillegg = json.findValue("ferietillegg")?.asText()
-                        if (ferietillegg != null && ferietillegg != "null") {
-                            StønadsdataDagpengerDto(it, Ferietillegg.valueOf(ferietillegg))
-                        } else {
-                            StønadsdataDagpengerDto(it)
-                        }
-                    },
-                    onFailure = {
-                        val stønadstype = StønadTypeTiltakspenger.valueOf(stønadstype)
-                        val barnetillegg = json.findValue("barnetillegg")?.asBoolean()
-                        StønadsdataTiltakspengerDto(stønadstype, barnetillegg ?: false)
+                onSuccess = {
+                    val ferietillegg = json.findValue("ferietillegg")?.asText()
+                    if (ferietillegg != null && ferietillegg != "null") {
+                        StønadsdataDagpengerDto(it, Ferietillegg.valueOf(ferietillegg))
+                    } else {
+                        StønadsdataDagpengerDto(it)
                     }
+                },
+                onFailure = {
+                    val stønadTypeTiltakspenger = StønadTypeTiltakspenger.valueOf(stønadstype)
+                    val barnetillegg = json.findValue("barnetillegg")?.asBoolean()
+                    StønadsdataTiltakspengerDto(stønadTypeTiltakspenger, barnetillegg ?: false)
+                },
             )
         }
     }
@@ -41,6 +41,6 @@ data class StønadsdataDagpengerDto(override val stønadstype: StønadTypeDagpen
 
 data class StønadsdataTiltakspengerDto(
     override val stønadstype: StønadTypeTiltakspenger,
-    val barnetillegg: Boolean = false
+    val barnetillegg: Boolean = false,
 ) :
     StønadsdataDto(stønadstype)
