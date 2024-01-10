@@ -11,36 +11,36 @@ enum class Ferietillegg {
     AVDOD
 }
 
-sealed class Stønadsdata(open val stønadstype: StønadType) {
+sealed class StønadsdataDto(open val stønadstype: StønadType) {
     companion object {
         @JsonCreator
         @JvmStatic
-        fun deserialize(json: JsonNode): Stønadsdata {
+        fun deserialize(json: JsonNode): StønadsdataDto {
             val stønadstype = json.findValue("stønadstype").asText()
             return Result.runCatching { StønadTypeDagpenger.valueOf(stønadstype) }.fold(
                     onSuccess = {
                         val ferietillegg = json.findValue("ferietillegg")?.asText()
                         if (ferietillegg != null && ferietillegg != "null") {
-                            StønadsdataDagpenger(it, Ferietillegg.valueOf(ferietillegg))
+                            StønadsdataDagpengerDto(it, Ferietillegg.valueOf(ferietillegg))
                         } else {
-                            StønadsdataDagpenger(it)
+                            StønadsdataDagpengerDto(it)
                         }
                     },
                     onFailure = {
                         val stønadstype = StønadTypeTiltakspenger.valueOf(stønadstype)
                         val barnetillegg = json.findValue("barnetillegg")?.asBoolean()
-                        StønadsdataTiltakspenger(stønadstype, barnetillegg ?: false)
+                        StønadsdataTiltakspengerDto(stønadstype, barnetillegg ?: false)
                     }
             )
         }
     }
 }
 
-data class StønadsdataDagpenger(override val stønadstype: StønadTypeDagpenger, val ferietillegg: Ferietillegg? = null) :
-    Stønadsdata(stønadstype)
+data class StønadsdataDagpengerDto(override val stønadstype: StønadTypeDagpenger, val ferietillegg: Ferietillegg? = null) :
+    StønadsdataDto(stønadstype)
 
-data class StønadsdataTiltakspenger(
+data class StønadsdataTiltakspengerDto(
     override val stønadstype: StønadTypeTiltakspenger,
     val barnetillegg: Boolean = false
 ) :
-    Stønadsdata(stønadstype)
+    StønadsdataDto(stønadstype)
