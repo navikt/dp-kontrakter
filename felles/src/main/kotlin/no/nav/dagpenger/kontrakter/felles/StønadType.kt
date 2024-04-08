@@ -18,11 +18,10 @@ sealed interface StønadType {
 }
 
 enum class StønadTypeDagpenger : StønadType {
-    DAGPENGER_ARBEIDSSØKER_ORDINÆR,
-    DAGPENGER_PERMITTERING_ORDINÆR,
+    DAGPENGER_ARBEIDSSOKER_ORDINAER,
+    DAGPENGER_PERMITTERING_ORDINAER,
     DAGPENGER_PERMITTERING_FISKEINDUSTRI,
-    DAGPENGER_EØS,
-    ;
+    DAGPENGER_EOS;
 
     override fun tilFagsystem(): Fagsystem = Fagsystem.DAGPENGER
 }

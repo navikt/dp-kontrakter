@@ -35,7 +35,7 @@ class IverksettDtoTest {
 
     @Test
     fun `deserialiserer dto med stønadstype for dagpenger`() {
-        assertDoesNotThrow { objectMapper.readValue<IverksettDto>(json(StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR)) }
+        assertDoesNotThrow { objectMapper.readValue<IverksettDto>(json(StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER)) }
     }
 
     @Test
