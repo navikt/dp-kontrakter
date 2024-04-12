@@ -11,10 +11,8 @@
     <name>Dagpenger - kontrakter</name>
 
     <modules>
-        <module>iverksett</module>
         <module>felles</module>
         <module>iverksett-integrasjoner</module>
-        <module>oppdrag</module>
     </modules>
 
     <properties>
